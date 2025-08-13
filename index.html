@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Kredit BPR Penataran</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .bg-gradient {
+            background: linear-gradient(135deg, #eef2ff 0%, #d8e0ff 100%);
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        .summary-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+        .summary-value {
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+        .summary-input {
+            width: 150px;
+            text-align: right;
+            border: 1px solid #e5e7eb;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body class="bg-gradient min-h-screen p-6 flex items-center justify-content-center">
+    <div class="container mx-auto max-w-2xl">
+        <div class="card-shadow bg-white rounded-2xl overflow-hidden">
+            <div class="bg-indigo-700 p-6 text-center">
+                <h2 class="text-3xl text-white font-bold tracking-tight">Kalkulator Kredit BPR Penataran</h2>
+                <p class="text-indigo-200 mt-1">Simulasi Perhitungan Kredit</p>
+            </div>
+            
+            <div class="p-8 space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2 col-span-2">
+                        <label for="pinjaman" class="block text-sm font-semibold text-gray-700">Jumlah Pinjaman</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">Rp</span>
+                            <input type="text" id="pinjaman" placeholder="Masukkan jumlah pinjaman" 
+                                   class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-right font-medium text-lg">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="lamaPinjaman" class="block text-sm font-semibold text-gray-700">Tenor (Bulan)</label>
+                        <input type="number" id="lamaPinjaman" placeholder="Lama pinjaman" 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-right font-medium text-lg">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="bungaTahunan" class="block text-sm font-semibold text-gray-700">Bunga Per Tahun</label>
+                        <div class="relative">
+                            <input type="number" id="bungaTahunan" placeholder="Bunga" 
+                                   class="w-full p-3 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-right font-medium text-lg">
+                            <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">%</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 col-span-2">
+                        <label for="modePerhitungan" class="block text-sm font-semibold text-gray-700">Metode Perhitungan</label>
+                        <select id="modePerhitungan" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-lg">
+                            <option value="flat">Flat Rate</option>
+                            <option value="efektif">Effective Rate</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2 col-span-2">
+                        <label class="block text-lg font-bold text-gray-700 mt-4">Biaya Lain-lain</label>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="biayaAdmin" class="block text-sm font-semibold text-gray-700">Biaya Administrasi</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">Rp</span>
+                            <input type="text" id="biayaAdmin" placeholder="Biaya Admin" 
+                                   class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-right font-medium text-lg">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="biayaAsuransi" class="block text-sm font-semibold text-gray-700">Biaya Asuransi</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">Rp</span>
+                            <input type="text" id="biayaAsuransi" placeholder="Biaya Asuransi" 
+                                   class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-right font-medium text-lg">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="biayaNotaris" class="block text-sm font-semibold text-gray-700">Biaya Notaris</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">Rp</span>
+                            <input type="text" id="biayaNotaris" placeholder="Biaya Notaris" 
+                                   class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-right font-medium text-lg">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="biayaTabungan" class="block text-sm font-semibold text-gray-700">Biaya Tabungan (4x Angsuran)</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">Rp</span>
+                            <input type="text" id="biayaTabungan" placeholder="Biaya Tabungan" 
+                                   class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-right font-medium text-lg" disabled>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="tambahanTabungan" class="block text-sm font-semibold text-gray-700">Tambahan Tabungan (1% Pinjaman)</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">Rp</span>
+                            <input type="text" id="tambahanTabungan" placeholder="Tambahan Tabungan" 
+                                   class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-right font-medium text-lg" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 p-6 border-t border-gray-100">
+                <button id="hitungBtn" class="w-full bg-indigo-700 hover:bg-indigo-800 text-white py-4 font-bold text-lg rounded-lg transition-colors duration-200">
+                    Hitung Simulasi
+                </button>
+            </div>
+        </div>
+
+        <div id="resultsContainer" class="hidden mt-8 space-y-6 max-w-2xl mx-auto">
+            
+            <div class="card-shadow bg-white rounded-2xl overflow-hidden">
+                <div class="bg-indigo-700 p-6 text-center">
+                    <h2 class="text-2xl text-white font-bold">Ringkasan Perhitungan</h2>
+                </div>
+                <div class="bg-white p-8">
+                    <div class="divide-y divide-gray-200">
+                        <div class="summary-item">
+                            <span class="summary-label">Metode Perhitungan</span>
+                            <span id="metodePerhitungan" class="summary-value">Flat Rate</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Jumlah Pinjaman</span>
+                            <span id="jumlahPinjaman" class="summary-value">Rp 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Lama Pinjaman</span>
+                            <span id="lamaPinjamanSummary" class="summary-value">0 Bulan</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Bunga Pertahun</span>
+                            <span id="bungaTahunanSummary" class="summary-value">0%</span>
+                        </div>
+                        <div class="summary-item bg-indigo-50 -mx-8 px-8 my-4">
+                            <span class="summary-label text-indigo-700 font-bold">Angsuran Bulanan</span>
+                            <span id="angsuranBulanan" class="text-indigo-700 font-bold text-xl">Rp 0</span>
+                        </div>
+                        <div class="summary-item mt-4 pt-4">
+                            <span class="summary-label">Biaya Administrasi</span>
+                            <span id="summaryBiayaAdmin" class="summary-value">Rp 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Biaya Asuransi</span>
+                            <span id="summaryBiayaAsuransi" class="summary-value">Rp 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Biaya Notaris</span>
+                            <span id="summaryBiayaNotaris" class="summary-value">Rp 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Biaya Tabungan (4x Angsuran)</span>
+                            <span id="summaryBiayaTabungan" class="summary-value">Rp 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Tambahan Tabungan (1% Pinjaman)</span>
+                            <span id="summaryTambahanTabungan" class="summary-value">Rp 0</span>
+                        </div>
+                        <div class="summary-item bg-green-100 -mx-8 px-8 mt-4">
+                            <span class="summary-label font-bold text-green-700">Penerimaan Bersih</span>
+                            <span id="terimaBersih" class="summary-value text-xl font-bold text-green-700">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="topupContainer" class="card-shadow bg-white rounded-2xl overflow-hidden mt-6">
+                <div class="bg-gray-700 p-6 text-center">
+                    <h2 class="text-2xl text-white font-bold">Ringkasan Top-Up & Pelunasan</h2>
+                </div>
+                <div class="bg-white p-8">
+                    <div class="divide-y divide-gray-200">
+                        <div class="summary-item">
+                            <span class="summary-label">Penerimaan Bersih Pinjaman Baru</span>
+                            <span id="topupPenerimaanBersih" class="summary-value">Rp 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Jumlah Pelunasan</span>
+                            <div class="relative flex items-center">
+                                <span class="text-gray-500 pr-2">Rp</span>
+                                <input type="text" id="inputPelunasan" class="summary-input" value="0">
+                            </div>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Jumlah Tabungan</span>
+                            <div class="relative flex items-center">
+                                <span class="text-gray-500 pr-2">Rp</span>
+                                <input type="text" id="inputTabungan" class="summary-input" value="0">
+                            </div>
+                        </div>
+                        <div class="summary-item bg-indigo-50 -mx-8 px-8 my-4">
+                            <span class="summary-label font-bold text-indigo-700">Dana Cair (Top-Up)</span>
+                            <span id="topupDanaCair" class="summary-value text-xl font-bold text-indigo-700">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-6">
+                <button id="downloadPdf" class="bg-indigo-700 hover:bg-indigo-800 text-white px-8 py-3 rounded-lg font-bold transition-colors duration-200">
+                    Download Laporan PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+        
+        function formatNominal(value) {
+            if (isNaN(value) || value === null) return '0';
+            return Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function parseNominal(value) {
+            return value.replace(/\./g, '');
+        }
+
+        // --- Perhitungan Flat Rate (Suku Bunga Tetap) ---
+        function hitungAngsuranFlat(pokok, bunga, tenor) {
+            const bungaBulanan = (pokok * bunga) / 12;
+            const angsuranPokok = pokok / tenor;
+            const totalAngsuran = angsuranPokok + bungaBulanan;
+
+            return {
+                ringkasan: {
+                    metodePerhitungan: 'Flat Rate',
+                    angsuranBulanan: totalAngsuran,
+                    pokok: pokok,
+                    tenor: tenor,
+                    bungaTahunan: bunga * 100,
+                }
+            };
+        }
+
+        // --- Perhitungan Effective Rate (Suku Bunga Efektif) ---
+        function hitungAngsuranEfektif(pokok, bunga, tenor) {
+            const bungaBulanan = bunga / 12;
+            const angsuranPokok = pokok / tenor;
+            
+            let totalBunga = 0;
+            let sisaPokok = pokok;
+            
+            for (let i = 1; i <= tenor; i++) {
+                const bungaAngsuran = sisaPokok * bungaBulanan;
+                totalBunga += bungaAngsuran;
+                sisaPokok -= angsuranPokok;
+            }
+            
+            const totalAngsuran = (pokok + totalBunga) / tenor;
+
+            return {
+                ringkasan: {
+                    metodePerhitungan: 'Effective Rate',
+                    angsuranBulanan: totalAngsuran,
+                    pokok: pokok,
+                    tenor: tenor,
+                    bungaTahunan: bunga * 100,
+                }
+            };
+        }
+
+        function generatePDF(result) {
+            const doc = new jsPDF();
+            
+            // Atur ukuran font dan padding agar muat di satu halaman
+            doc.setFontSize(14);
+            doc.setTextColor(40, 40, 40);
+            doc.text('LAPORAN SIMULASI KREDIT BPR PENATARAN', 105, 15, { align: 'center' });
+            
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Dibuat pada: ${new Date().toLocaleDateString('id-ID')}`, 105, 22, { align: 'center' });
+            
+            doc.setFontSize(10);
+            
+            const summaryData = [
+                ['Metode Perhitungan', result.ringkasan.metodePerhitungan],
+                ['Jumlah Pinjaman', `Rp ${formatNominal(result.ringkasan.pokok)}`],
+                ['Lama Pinjaman', `${result.ringkasan.tenor} Bulan`],
+                ['Bunga Pertahun', `${Math.round(result.ringkasan.bungaTahunan)}%`],
+                ['Angsuran Bulanan', `Rp ${formatNominal(result.ringkasan.angsuranBulanan)}`],
+                ['Biaya Administrasi', `Rp ${formatNominal(result.ringkasan.biayaAdmin)}`],
+                ['Biaya Asuransi', `Rp ${formatNominal(result.ringkasan.biayaAsuransi)}`],
+                ['Biaya Notaris', `Rp ${formatNominal(result.ringkasan.biayaNotaris)}`],
+                ['Biaya Tabungan (4x Angsuran)', `Rp ${formatNominal(result.ringkasan.biayaTabungan)}`],
+                ['Tambahan Tabungan (1% Pinjaman)', `Rp ${formatNominal(result.ringkasan.tambahanTabungan)}`],
+                ['Penerimaan Bersih', `Rp ${formatNominal(result.ringkasan.terimaBersih)}`]
+            ];
+
+            const topupData = [
+                ['Penerimaan Bersih Pinjaman Baru', `Rp ${formatNominal(result.ringkasan.terimaBersih)}`],
+                ['Jumlah Pelunasan', `Rp ${formatNominal(result.ringkasan.jumlahPelunasan)}`],
+                ['Jumlah Tabungan', `Rp ${formatNominal(result.ringkasan.jumlahTabungan)}`],
+                ['Dana Cair (Top-Up)', `Rp ${formatNominal(result.ringkasan.danaCair)}`]
+            ];
+            
+            doc.autoTable({
+                startY: 30,
+                head: [['Ringkasan Perhitungan', 'Nilai']],
+                body: summaryData,
+                theme: 'grid',
+                headStyles: {
+                    fillColor: [67, 56, 202],
+                    textColor: 255,
+                    fontStyle: 'bold',
+                    fontSize: 10
+                },
+                styles: {
+                    cellPadding: 3,
+                    fontSize: 8,
+                    valign: 'middle',
+                    halign: 'left'
+                },
+                columnStyles: {
+                    0: { fontStyle: 'bold', cellWidth: 70, halign: 'left' },
+                    1: { cellWidth: 'auto', halign: 'right' }
+                }
+            });
+
+            doc.autoTable({
+                startY: doc.autoTable.previous.finalY + 10,
+                head: [['Ringkasan Top-Up & Pelunasan', 'Nilai']],
+                body: topupData,
+                theme: 'grid',
+                headStyles: {
+                    fillColor: [55, 65, 81],
+                    textColor: 255,
+                    fontStyle: 'bold',
+                    fontSize: 10
+                },
+                styles: {
+                    cellPadding: 3,
+                    fontSize: 8,
+                    valign: 'middle',
+                    halign: 'left'
+                },
+                columnStyles: {
+                    0: { fontStyle: 'bold', cellWidth: 70, halign: 'left' },
+                    1: { cellWidth: 'auto', halign: 'right' }
+                }
+            });
+            
+            // Simpan PDF dengan nama file yang diminta
+            doc.save('Laporan Simulasi Kredit BPR Penataran.pdf');
+        }
+
+        function hitungSimulasi() {
+            const pinjaman = parseFloat(parseNominal(document.getElementById('pinjaman').value));
+            const lamaPinjaman = parseInt(document.getElementById('lamaPinjaman').value);
+            const bungaTahunan = parseFloat(document.getElementById('bungaTahunan').value) / 100;
+            const modePerhitungan = document.getElementById('modePerhitungan').value;
+            const biayaAdmin = parseFloat(parseNominal(document.getElementById('biayaAdmin').value)) || 0;
+            const biayaAsuransi = parseFloat(parseNominal(document.getElementById('biayaAsuransi').value)) || 0;
+            const biayaNotaris = parseFloat(parseNominal(document.getElementById('biayaNotaris').value)) || 0;
+            
+            const jumlahPelunasan = parseFloat(parseNominal(document.getElementById('inputPelunasan').value)) || 0;
+            const jumlahTabungan = parseFloat(parseNominal(document.getElementById('inputTabungan').value)) || 0;
+
+            if (!pinjaman || !lamaPinjaman || isNaN(bungaTahunan)) {
+                alert('Harap isi Jumlah Pinjaman, Tenor, dan Bunga dengan benar');
+                return;
+            }
+
+            let result;
+            
+            switch (modePerhitungan) {
+                case 'flat':
+                    result = hitungAngsuranFlat(pinjaman, bungaTahunan, lamaPinjaman);
+                    break;
+                case 'efektif':
+                    result = hitungAngsuranEfektif(pinjaman, bungaTahunan, lamaPinjaman);
+                    break;
+                default:
+                    alert('Mode perhitungan tidak valid');
+                    return;
+            }
+            
+            const biayaTabungan = result.ringkasan.angsuranBulanan * 4;
+            document.getElementById('biayaTabungan').value = formatNominal(biayaTabungan);
+            
+            const tambahanTabungan = pinjaman * 0.01;
+            document.getElementById('tambahanTabungan').value = formatNominal(tambahanTabungan);
+
+            const totalPengeluaran = biayaAdmin + biayaAsuransi + biayaNotaris + biayaTabungan + tambahanTabungan;
+
+            const terimaBersih = pinjaman - totalPengeluaran;
+
+            const danaCair = terimaBersih - jumlahPelunasan + jumlahTabungan;
+
+            // Update objek ringkasan hasil
+            result.ringkasan.biayaAdmin = biayaAdmin;
+            result.ringkasan.biayaAsuransi = biayaAsuransi;
+            result.ringkasan.biayaNotaris = biayaNotaris;
+            result.ringkasan.biayaTabungan = biayaTabungan;
+            result.ringkasan.tambahanTabungan = tambahanTabungan;
+            result.ringkasan.terimaBersih = terimaBersih;
+            result.ringkasan.jumlahPelunasan = jumlahPelunasan;
+            result.ringkasan.jumlahTabungan = jumlahTabungan;
+            result.ringkasan.danaCair = danaCair;
+
+            // Update summary table
+            document.getElementById('metodePerhitungan').textContent = result.ringkasan.metodePerhitungan;
+            document.getElementById('jumlahPinjaman').textContent = `Rp ${formatNominal(result.ringkasan.pokok)}`;
+            document.getElementById('lamaPinjamanSummary').textContent = `${result.ringkasan.tenor} Bulan`;
+            document.getElementById('bungaTahunanSummary').textContent = `${Math.round(result.ringkasan.bungaTahunan)}%`;
+            document.getElementById('angsuranBulanan').textContent = `Rp ${formatNominal(result.ringkasan.angsuranBulanan)}`;
+            
+            document.getElementById('summaryBiayaAdmin').textContent = `Rp ${formatNominal(result.ringkasan.biayaAdmin)}`;
+            document.getElementById('summaryBiayaAsuransi').textContent = `Rp ${formatNominal(result.ringkasan.biayaAsuransi)}`;
+            document.getElementById('summaryBiayaNotaris').textContent = `Rp ${formatNominal(result.ringkasan.biayaNotaris)}`;
+            document.getElementById('summaryBiayaTabungan').textContent = `Rp ${formatNominal(result.ringkasan.biayaTabungan)}`;
+            document.getElementById('summaryTambahanTabungan').textContent = `Rp ${formatNominal(result.ringkasan.tambahanTabungan)}`;
+            document.getElementById('terimaBersih').textContent = `Rp ${formatNominal(result.ringkasan.terimaBersih)}`;
+
+            // Update top-up summary table
+            document.getElementById('topupPenerimaanBersih').textContent = `Rp ${formatNominal(result.ringkasan.terimaBersih)}`;
+            document.getElementById('topupDanaCair').textContent = `Rp ${formatNominal(result.ringkasan.danaCair)}`;
+            
+            // Set up PDF download
+            document.getElementById('downloadPdf').onclick = () => generatePDF(result);
+
+            // Show results
+            document.getElementById('resultsContainer').classList.remove('hidden');
+        }
+
+        // Event listeners
+        document.getElementById('hitungBtn').addEventListener('click', hitungSimulasi);
+        document.getElementById('inputPelunasan').addEventListener('input', hitungSimulasi);
+        document.getElementById('inputTabungan').addEventListener('input', hitungSimulasi);
+
+        // Event listeners for formatting input fields
+        ['pinjaman', 'biayaAdmin', 'biayaAsuransi', 'biayaNotaris', 'inputPelunasan', 'inputTabungan'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function(e) {
+                const value = parseNominal(e.target.value);
+                if (!isNaN(value)) {
+                    e.target.value = formatNominal(value);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
