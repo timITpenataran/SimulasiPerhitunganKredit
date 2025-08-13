@@ -113,7 +113,7 @@
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <label for="biayaTabungan" class="block text-sm font-semibold text-gray-700">Biaya Tabungan (4x Angsuran)</label>
+                        <label for="biayaTabungan" class="block text-sm font-semibold text-gray-700">Potongan (4x Angsuran)</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">Rp</span>
                             <input type="text" id="biayaTabungan" placeholder="Biaya Tabungan" 
@@ -179,7 +179,7 @@
                             <span id="summaryBiayaNotaris" class="summary-value">Rp 0</span>
                         </div>
                         <div class="summary-item">
-                            <span class="summary-label">Biaya Tabungan (4x Angsuran)</span>
+                            <span class="summary-label">Potongan (4x Angsuran)</span>
                             <span id="summaryBiayaTabungan" class="summary-value">Rp 0</span>
                         </div>
                         <div class="summary-item">
@@ -313,7 +313,7 @@
                 ['Biaya Administrasi', `Rp ${formatNominal(result.ringkasan.biayaAdmin)}`],
                 ['Biaya Asuransi', `Rp ${formatNominal(result.ringkasan.biayaAsuransi)}`],
                 ['Biaya Notaris', `Rp ${formatNominal(result.ringkasan.biayaNotaris)}`],
-                ['Biaya Tabungan (4x Angsuran)', `Rp ${formatNominal(result.ringkasan.biayaTabungan)}`],
+                ['Potongan (4x Angsuran)', `Rp ${formatNominal(result.ringkasan.biayaTabungan)}`],
                 ['Tambahan Tabungan (1% Pinjaman)', `Rp ${formatNominal(result.ringkasan.tambahanTabungan)}`],
                 ['Penerimaan Bersih', `Rp ${formatNominal(result.ringkasan.terimaBersih)}`]
             ];
